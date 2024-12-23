@@ -21,7 +21,7 @@ class DataIngestion:
         logging.info("Data Ingestion has been started")
         try:
             logging.info("Data reading using Pandas from local file system") # if data read from api, wearehouse mentioned here
-            data = pd.read_csv(os.path.join("data-source", "adult.csv"))
+            data = pd.read_csv(os.path.join("data-source", "income_cleandata.csv"))
             logging.info("Data reading has been completed")
 
             os.makedirs(os.path.dirname(self.ingestion_config.raw_data_path), exist_ok=True)
