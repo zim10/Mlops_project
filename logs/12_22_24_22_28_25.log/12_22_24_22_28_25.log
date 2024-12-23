@@ -1,0 +1,5 @@
+[ 2024-12-22 22:28:25,101 ] 52 root - ERROR - 
+Error occurred in Python script:
+→ File: test-logging-integration-app.py
+→ Line number: 9
+→ Error message: division by zero

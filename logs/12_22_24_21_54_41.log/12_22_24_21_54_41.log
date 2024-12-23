@@ -1,0 +1,12 @@
+[ 2024-12-22 21:54:41,855 ] 26 root - INFO - ==================================================
+[ 2024-12-22 21:54:41,855 ] 27 root - INFO - Application execution has started
+[ 2024-12-22 21:54:41,855 ] 28 root - INFO - ==================================================
+[ 2024-12-22 21:54:41,855 ] 5 root - INFO - Starting the main function
+[ 2024-12-22 21:54:41,855 ] 8 root - INFO - Step 1: Initializing application
+[ 2024-12-22 21:54:41,855 ] 12 root - INFO - Step 2: Performing calculation with values x=5 and y=10
+[ 2024-12-22 21:54:41,855 ] 15 root - INFO - Step 3: Calculation comple, Result: 15
+[ 2024-12-22 21:54:41,856 ] 19 root - WARNING - Result 15 is greater than threshold (10)
+[ 2024-12-22 21:54:41,856 ] 32 root - INFO - Application completed successfully
+[ 2024-12-22 21:54:41,856 ] 36 root - INFO - ==================================================
+[ 2024-12-22 21:54:41,856 ] 37 root - INFO - Application execution has ended
+[ 2024-12-22 21:54:41,856 ] 38 root - INFO - ==================================================
