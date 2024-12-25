@@ -1,0 +1,36 @@
+[ 2024-12-23 19:55:09,181 ] 22 root - INFO - Data Ingestion has been started
+[ 2024-12-23 19:55:09,181 ] 24 root - INFO - Data reading using Pandas from local file system
+[ 2024-12-23 19:55:09,202 ] 26 root - INFO - Data reading has been completed
+[ 2024-12-23 19:55:09,258 ] 30 root - INFO - Raw data has been stored
+[ 2024-12-23 19:55:09,262 ] 33 root - INFO - Raw data has been splitted into train and test set
+[ 2024-12-23 19:55:09,318 ] 38 root - INFO - Data has been completed
+[ 2024-12-23 19:55:09,319 ] 50 root - INFO - Created feature store configuration at /home/azim/mlops-project/feature_repo/feature_store.yaml
+[ 2024-12-23 19:55:09,319 ] 54 root - INFO - Configuration file content:
+project: income_prediction
+provider: local
+registry: data/registry.db
+online_store:
+    type: sqlite
+offline_store
+    type: file
+entity_key_serialization_version: 2
+[ 2024-12-23 19:55:09,321 ] 61 root - ERROR - Error in initialization: while scanning a simple key
+  in "<unicode string>", line 6, column 1:
+    offline_store
+    ^
+could not find expected ':'
+  in "<unicode string>", line 7, column 9:
+        type: file
+            ^
+[ 2024-12-23 19:55:09,321 ] 52 root - ERROR - 
+Error occurred in Python script:
+→ File: /home/azim/mlops-project/src/components/data_transformation.py
+→ Line number: 57
+→ Error message: while scanning a simple key
+  in "<unicode string>", line 6, column 1:
+    offline_store
+    ^
+could not find expected ':'
+  in "<unicode string>", line 7, column 9:
+        type: file
+            ^
