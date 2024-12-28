@@ -34,7 +34,7 @@ def predict():
 
         #Return prediction result as a json object
         return jsonify({
-            "status"; "success",
+            "status": "success",
             "prediction": int(pred[0]),
             "income_category": "<=50K" if pred[0] == 0 else ">50K"
         })
