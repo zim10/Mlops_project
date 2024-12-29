@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/337883027298903910/6450adc7eb3c495a90f69123577ae610/artifacts
+end_time: 1735505132024
+entry_point_name: ''
+experiment_id: '337883027298903910'
+lifecycle_stage: active
+run_id: 6450adc7eb3c495a90f69123577ae610
+run_name: DecisionTree_training_run_20241229_154443
+run_uuid: 6450adc7eb3c495a90f69123577ae610
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1735505123854
+status: 3
+tags: []
+user_id: azim

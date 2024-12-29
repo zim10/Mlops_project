@@ -1,0 +1,62 @@
+[ 2024-12-29 15:40:39,717 ] 23 root - INFO - Data Ingestion has been started
+[ 2024-12-29 15:40:39,717 ] 25 root - INFO - Data reading using Pandas from local file system
+[ 2024-12-29 15:40:39,738 ] 27 root - INFO - Data reading has been completed
+[ 2024-12-29 15:40:39,800 ] 31 root - INFO - Raw data has been stored
+[ 2024-12-29 15:40:39,803 ] 34 root - INFO - Raw data has been splitted into train and test set
+[ 2024-12-29 15:40:39,862 ] 39 root - INFO - Data has been completed
+[ 2024-12-29 15:40:39,862 ] 49 root - INFO - Created feature store configuration at /home/azim/mlops-project/feature_repo/feature_repo/feature_store.yaml
+[ 2024-12-29 15:40:39,862 ] 53 root - INFO - Configuration file content:
+project: income_prediction
+provider: local
+registry: data/registry.db
+online_store:
+  type: sqlite
+offline_store:
+  type: file
+entity_key_serialization_version: 2
+[ 2024-12-29 15:40:39,878 ] 855 feast.infra.registry.registry - INFO - Registry cache expired, so refreshing
+[ 2024-12-29 15:40:39,885 ] 57 root - INFO - Feature store initialized successfully
+[ 2024-12-29 15:40:39,905 ] 110 root - INFO - Read train and test data completed
+[ 2024-12-29 15:40:39,905 ] 111 root - INFO - Obtaining preprocessing object
+[ 2024-12-29 15:40:39,905 ] 65 root - INFO - Data Transformation Started
+[ 2024-12-29 15:40:39,907 ] 126 root - INFO - Applying preprocessing object on training and testing datasets.
+[ 2024-12-29 15:40:39,941 ] 131 root - INFO - Starting feature store operations
+[ 2024-12-29 15:40:39,954 ] 176 root - INFO - Saved feature data to feature_repo/data/train_features.parquet
+[ 2024-12-29 15:40:39,955 ] 855 feast.infra.registry.registry - INFO - Registry cache expired, so refreshing
+[ 2024-12-29 15:40:39,971 ] 215 root - INFO - Applied entity and feature view for train
+[ 2024-12-29 15:40:39,974 ] 855 feast.infra.registry.registry - INFO - Registry cache expired, so refreshing
+[ 2024-12-29 15:40:39,976 ] 855 feast.infra.registry.registry - INFO - Registry cache expired, so refreshing
+[ 2024-12-29 15:40:39,977 ] 855 feast.infra.registry.registry - INFO - Registry cache expired, so refreshing
+[ 2024-12-29 15:40:47,227 ] 222 root - INFO - Materialized features successfully
+[ 2024-12-29 15:40:47,228 ] 135 root - INFO - Pushed training data to feature store
+[ 2024-12-29 15:40:47,234 ] 176 root - INFO - Saved feature data to feature_repo/data/test_features.parquet
+[ 2024-12-29 15:40:47,235 ] 855 feast.infra.registry.registry - INFO - Registry cache expired, so refreshing
+[ 2024-12-29 15:40:47,241 ] 215 root - INFO - Applied entity and feature view for test
+[ 2024-12-29 15:40:47,242 ] 855 feast.infra.registry.registry - INFO - Registry cache expired, so refreshing
+[ 2024-12-29 15:40:47,245 ] 855 feast.infra.registry.registry - INFO - Registry cache expired, so refreshing
+[ 2024-12-29 15:40:47,245 ] 855 feast.infra.registry.registry - INFO - Registry cache expired, so refreshing
+[ 2024-12-29 15:40:53,069 ] 855 feast.infra.registry.registry - INFO - Registry cache expired, so refreshing
+[ 2024-12-29 15:40:53,070 ] 225 root - ERROR - Error in push_features_to_store: An error occurred while calling the read_parquet method registered to the pandas backend.
+Original Message: /home/azim/mlops-project/feature_repo/data/test_features.parquet
+[ 2024-12-29 15:40:53,070 ] 52 root - ERROR - 
+Error occurred in Python script:
+→ File: /home/azim/mlops-project/src/components/data_transformation.py
+→ Line number: 218
+→ Error message: An error occurred while calling the read_parquet method registered to the pandas backend.
+Original Message: /home/azim/mlops-project/feature_repo/data/test_features.parquet
+[ 2024-12-29 15:40:53,070 ] 151 root - ERROR - Error in data transformation: 
+Error occurred in Python script:
+→ File: /home/azim/mlops-project/src/components/data_transformation.py
+→ Line number: 218
+→ Error message: An error occurred while calling the read_parquet method registered to the pandas backend.
+Original Message: /home/azim/mlops-project/feature_repo/data/test_features.parquet
+[ 2024-12-29 15:40:53,070 ] 52 root - ERROR - 
+Error occurred in Python script:
+→ File: /home/azim/mlops-project/src/components/data_transformation.py
+→ Line number: 137
+→ Error message: 
+Error occurred in Python script:
+→ File: /home/azim/mlops-project/src/components/data_transformation.py
+→ Line number: 218
+→ Error message: An error occurred while calling the read_parquet method registered to the pandas backend.
+Original Message: /home/azim/mlops-project/feature_repo/data/test_features.parquet

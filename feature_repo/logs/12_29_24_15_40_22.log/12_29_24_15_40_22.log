@@ -1,0 +1,8 @@
+[ 2024-12-29 15:40:25,234 ] 23 root - INFO - Data Ingestion has been started
+[ 2024-12-29 15:40:25,234 ] 25 root - INFO - Data reading using Pandas from local file system
+[ 2024-12-29 15:40:25,234 ] 44 root - INFO - Error occured in data ingestion stage
+[ 2024-12-29 15:40:25,235 ] 52 root - ERROR - 
+Error occurred in Python script:
+→ File: /home/azim/mlops-project/src/components/data_ingestion.py
+→ Line number: 26
+→ Error message: [Errno 2] No such file or directory: 'data-source/income_cleandata.csv'

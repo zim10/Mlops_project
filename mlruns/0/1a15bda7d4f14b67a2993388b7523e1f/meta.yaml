@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/1a15bda7d4f14b67a2993388b7523e1f/artifacts
+end_time: 1735503258412
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 1a15bda7d4f14b67a2993388b7523e1f
+run_name: complete_pipeline
+run_uuid: 1a15bda7d4f14b67a2993388b7523e1f
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1735503258402
+status: 4
+tags: []
+user_id: azim

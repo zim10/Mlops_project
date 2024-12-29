@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/337883027298903910/bf93e6ff9ae5422b8e9f6375072d52b4/artifacts
+end_time: 1735505138345
+entry_point_name: ''
+experiment_id: '337883027298903910'
+lifecycle_stage: active
+run_id: bf93e6ff9ae5422b8e9f6375072d52b4
+run_name: best_model_summary_training_run_20241229_154443
+run_uuid: bf93e6ff9ae5422b8e9f6375072d52b4
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1735505138067
+status: 3
+tags: []
+user_id: azim
