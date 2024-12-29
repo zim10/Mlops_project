@@ -8,7 +8,7 @@ import numpy as np
 from datetime import datetime
 from src.logger import logging
 from src.exception import CustomException
-from src.components.data_transformation import DataTransformation
+from src.components.new_file.data_transformation import DataTransformation
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from dataclasses import dataclass
 from sklearn.model_selection import GridSearchCV
@@ -17,45 +17,44 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from src.utils import save_object
 
-
 @dataclass
 class ModelTrainingConfig:
     train_model_file_path = os.path.join("artifacts/model_trainer", "model.pkl")
     mlflow_uri = "http://localhost:5000"
-    experiment_name = "Modular_workflow_prediction_Pipeline"
-
+    experiment_name = "Modular_Workflow_Prediction_Pipeline"
 
 class ModelTrainer:
     def __init__(self):
         self.model_trainer_config = ModelTrainingConfig()
 
-        #configure MLFlow
+        # Configure MLFlow
         mlflow.set_tracking_uri(self.model_trainer_config.mlflow_uri)
-        mlflow.set_experiment( self.model_trainer_config.experiment_name)
-        
+        mlflow.set_experiment(self.model_trainer_config.experiment_name)
+
         self.client = MlflowClient()
-        self.run_name = f"trainning_run{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+        self.run_name = f"training_run_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
 
     def log_metrics(self, y_true, y_pred, prefix=""):
-        """ Calculate and log metric to MLflow"""
+        """Calculate and log metric to MLFlow"""
         metrics = {
             f"{prefix}accuracy": accuracy_score(y_true, y_pred),
-            f"{prefix}precision": precision_score(y_true, y_pred, average="weighted"),
-            f"{prefix}recall": recall_score(y_true, y_pred, average="weighted"),
-            f"{prefix}f1 score": f1_score(y_true, y_pred, average="weighted"),
+            f"{prefix}precision": precision_score(y_true, y_pred, average='weighted'),
+            f"{prefix}recall": recall_score(y_true, y_pred, average='weighted'),
+            f"{prefix}f1": f1_score(y_true, y_pred, average='weighted'),
         }
-        mlflow.log_metric(metrics)
+        mlflow.log_metrics(metrics)
         return metrics
     
-    def training_model(self, X_train, y_train, X_test, y_test, model_name, model, params):
+    def train_model(self, X_train, y_train, X_test, y_test, model_name, model, params):
         """Train and evaluate a single model with grid search"""
         try:
             with mlflow.start_run(run_name=f"{model_name}_{self.run_name}") as run:
-                logging.info(f"started Training {model_name}")
+                logging.info(f"Started Training {model_name}")
 
-                #log model parameters
+                # Log model parameters
                 mlflow.log_params(params)
-                #perform grid search
+
+                # Perform Grid Search
                 grid_search = GridSearchCV(
                     estimator=model,
                     param_grid=params,
@@ -64,66 +63,66 @@ class ModelTrainer:
                     verbose=2,
                     scoring='accuracy'
                 )
-                #train the model
+
+                # Train the Model
                 grid_search.fit(X_train, y_train)
-                #log best parameters
+
+                # Log best parameters
                 best_params = {f"best_{k}": v for k, v in grid_search.best_params_.items()}
                 mlflow.log_params(best_params)
-                logging.info(f"best parameters for {model_name}: {best_params}")
+                logging.info(f"Best Paramaters for {model_name}: {best_params}")
 
-                #get predectionons
+                # Get Predictions
                 y_train_pred = grid_search.predict(X_train)
                 y_test_pred = grid_search.predict(X_test)
-
-                #log metrics
-
+                
+                # Log Metrics
                 train_metrics = self.log_metrics(y_train, y_train_pred, prefix="train_")
                 test_metrics = self.log_metrics(y_test, y_test_pred, prefix="test_")
 
-                #log cv scores
+                # Log CV Scores
                 mlflow.log_metric("cv_mean_score", grid_search.best_score_)
                 mlflow.log_metric("cv_std_score", grid_search.cv_results_['std_test_score'][grid_search.best_index_])
-
-                #feature importance log if availabel
-                if hasattr(grid_search.best_estimator_, 'feature_importance_'):
+                
+                # Log feature importance (if available)
+                if hasattr(grid_search.best_estimator_, 'feature_importances_'):
                     feature_importance = pd.DataFrame({
-                        'feature':[f"feature_{i}" for i in range(X_train.shape[1])],
-                        'importance': grid_search.best_estimator__.feature_importances_
+                        'feature': [f"feature_{i}" for i in range(X_train.shape[1])],
+                        'importance': grid_search.best_estimator_.feature_importances_
                     })
-                     
-                #create feature importance plot
-                import matplotlib.pyplot as plt
-                plt.figure(figsize=(10, 6))
-                plt.bar(feature_importance['feature'], feature_importance['importance'])
-                plt.xticks(rotation=45)
-                plt.title(f'Feature importance - {model_name}')
-                plt.tight_layout()
-
-                #save and log plot
-                plot_path = f"feature_importance_{model_name}.png"
-                plt.savefig(plot_path)
-                mlflow.log_artifact(plot_path)
-                os.remove(plot_path)
-            
-                # log model
+                
+                    # Create feature importance plot
+                    import matplotlib.pyplot as plt
+                    plt.figure(figsize=(10, 6))
+                    plt.bar(feature_importance['feature'], feature_importance['importance'])
+                    plt.xticks(rotation=45)
+                    plt.title(f'Feature Importance - {model_name}')
+                    plt.tight_layout()
+                    
+                    # Save and log plot
+                    plot_path = f"feature_importance_{model_name}.png"
+                    plt.savefig(plot_path)
+                    mlflow.log_artifact(plot_path)
+                    os.remove(plot_path)
+                
                 mlflow.sklearn.log_model(
-                grid_search.best_estimator_,
-                f"{model_name}_model",
-                registered_model_name=model_name
+                    grid_search.best_estimator_,
+                    f"{model_name}_model",
+                    registered_model_name=model_name
                 )
-                logging.info(f"Completed training {model_name}")
+
+                logging.info(f"Completed Training {model_name}")
                 return grid_search.best_estimator_, test_metrics['test_accuracy']
-    
+        
         except Exception as e:
             logging.error(f"Error in training {model_name}: {str(e)}")
             raise CustomException(e, sys)
-        
-
+    
     def initiate_model_trainer(self, train_array, test_array):
         try:
-            logging.info("starting model training pipeline")
+            logging.info("Starting model training pipeline")
 
-            #split data
+            # Split Data
             X_train, y_train, X_test, y_test = (
                 train_array[:, :-1],
                 train_array[:, -1],
@@ -131,7 +130,6 @@ class ModelTrainer:
                 test_array[:, -1]
             )
 
-            #define models and parameters
             # Define models and parameters
             models = {
                 "RandomForest": {
@@ -162,10 +160,10 @@ class ModelTrainer:
                 }
             }
             
-            # training the models and store resutls
+            # Training the models and store results
             model_results = {}
             for model_name, config in models.items():
-                logging.info(f"Training{model_name}")
+                logging.info(f"Training {model_name}")
                 model, accuracy = self.train_model(
                     X_train, y_train,
                     X_test, y_test,
@@ -175,48 +173,50 @@ class ModelTrainer:
                 )
                 model_results[model_name] = {
                     "model": model,
-                    "accuracy": accuracy
+                    "accuracy":accuracy
                 }
             
-            best_model_name = max(model_results.items(), key=lambda x: x[1]["accuracy"][0])
+            best_model_name = max(model_results.items(), key=lambda x: x[1]["accuracy"])[0]
             best_model = model_results[best_model_name]["model"]
             best_accuracy = model_results[best_model_name]["accuracy"]
 
-            logging.info(f"Best model: {best_model_name} with accuracy: {best_accuracy}")
+            logging.info(f"Best model: {best_model_name} with accuracy:{best_accuracy}")
 
-            #log best model summary
+            # Log best model summary
             with mlflow.start_run(run_name=f"best_model_summary_{self.run_name}"):
                 mlflow.log_param("best_model", best_model_name)
                 mlflow.log_metric("best_accuracy", best_accuracy)
-
-                #log comparison metrics
+                
+                # Log comparison metrics
                 comparison_metrics = {
                     f"{name}_accuracy": results["accuracy"]
                     for name, results in model_results.items()
                 }
-                mlflow.log_metric(comparison_metrics)
+                mlflow.log_metrics(comparison_metrics)
 
-                #create comparsion plot
+                # Create comparison plot
                 import matplotlib.pyplot as plt
                 plt.figure(figsize=(10, 6))
                 plt.bar(comparison_metrics.keys(), comparison_metrics.values())
-                plt.xtrics(rotation=45)
-                plt.title('Modle comparison')
+                plt.xticks(rotation=45)
+                plt.title('Model Comparison')
                 plt.tight_layout()
-                plt.savefig("model_comparision.png")
-                mlflow.log_artifact("model_comparision.png")
+                plt.savefig("model_comparison.png")
+                mlflow.log_artifact("model_comparison.png")
                 os.remove("model_comparison.png")
-            
-            #save best model
-            os.makedirs(os.path.dirname(self.model_trainer_config.train_model_file_path), exist_ok =True)
+
+            # Save best model
+            os.makedirs(os.path.dirname(self.model_trainer_config.train_model_file_path), exist_ok=True)
             save_object(
                 file_path=self.model_trainer_config.train_model_file_path,
-                obj = best_model
+                obj=best_model
             )
+
             return best_accuracy
+        
         except Exception as e:
-            logging.error(f"Error in model training pripeline: {str(e)}")
-            raise CustomException(e, sys)
+            logging.error(f"Error in model training pipeline: {str(e)}")
+            raise CustomException
         
     def main():
         try:
@@ -248,16 +248,8 @@ class ModelTrainer:
         except Exception as e:
             logging.error(f"Error in training pipeline: {str(e)}")
             raise CustomException(e, sys)
-    
+
     if __name__ == "__main__":
-        #fist run mlflow server
-        #mlflow server --host 0.0.0.0 --port 5000
-
+        # First start MLFLow server
+        # mlflow server --host 0.0.0.0 --port 5000
         main()
-
-
-
-
-        
-
-

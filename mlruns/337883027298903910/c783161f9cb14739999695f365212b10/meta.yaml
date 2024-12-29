@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/337883027298903910/c783161f9cb14739999695f365212b10/artifacts
+end_time: 1735505714643
+entry_point_name: ''
+experiment_id: '337883027298903910'
+lifecycle_stage: active
+run_id: c783161f9cb14739999695f365212b10
+run_name: LogisticRegression_training_run_20241229_155420
+run_uuid: c783161f9cb14739999695f365212b10
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1735505708555
+status: 3
+tags: []
+user_id: azim
